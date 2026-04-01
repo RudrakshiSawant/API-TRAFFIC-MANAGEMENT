@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-header">
+  <h1>Traffic Simulator</h1>
+  <p>
+    Simulate incoming API traffic and observe how requests are filtered,
+    controlled, forwarded, or rejected before reaching backend services.
+  </p>
+</section>
+
+<section class="content-card">
+  <h2>Inject Traffic</h2>
+
+  <div class="form-grid">
+    <div>
+      <label>Select Service</label>
+      <select id="service">
+        <option>Auth Service</option>
+        <option>Data Service</option>
+        <option>Analytics Service</option>
+        <option>Notification Service</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Traffic Type</label>
+      <select id="traffic_type">
+        <option>Normal</option>
+        <option>Burst</option>
+        <option>Priority</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Request Count</label>
+      <input type="number" id="request_count" min="1" value="8">
+    </div>
+  </div>
+
+  <button class="primary-btn" onclick="simulateTraffic()">Inject Traffic</button>
+</section>
+
+<section class="content-card">
+  <h2>Traffic Flow</h2>
+
+  <div class="traffic-flow-wrapper">
+    <div class="flow-node" id="node-client">
+      <div class="flow-title">Client</div>
+      <div class="flow-sub">Incoming Requests</div>
+      <div class="request-badge" id="clientRequests">0</div>
+    </div>
+
+    <div class="flow-arrow">→</div>
+
+    <div class="flow-node" id="node-filter">
+      <div class="flow-title">Traffic Filter</div>
+      <div class="flow-sub">Request Screening</div>
+      <div class="request-badge" id="filterRequests">0</div>
+    </div>
+
+    <div class="flow-arrow">→</div>
+
+    <div class="flow-node" id="node-rule">
+      <div class="flow-title">Rule Engine</div>
+      <div class="flow-sub">Decision Layer</div>
+      <div class="request-badge" id="ruleRequests">0</div>
+    </div>
+
+    <div class="flow-arrow">→</div>
+
+    <div class="flow-node" id="node-backend">
+      <div class="flow-title" id="backendServiceName">Backend Service</div>
+      <div class="flow-sub">Final Destination</div>
+      <div class="request-badge" id="backendRequests">0</div>
+    </div>
+  </div>
+</section>
+
+<section class="content-card">
+  <h2>Live API Output & Traffic Decision</h2>
+
+  <div class="terminal-grid">
+    <div>
+      <h3 class="terminal-heading">API Response</h3>
+      <div class="terminal-box" id="apiOutputBox">
+        <div><span class="terminal-prompt">></span> Waiting for API response...</div>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="terminal-heading">Traffic Control Console</h3>
+      <div class="terminal-box" id="resultBox">
+        <div><span class="terminal-prompt">></span> Waiting for traffic simulation...</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

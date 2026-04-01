@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Traffic Control Platform</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <h2>Traffic Control</h2>
+        <p>API Management Platform</p>
+      </div>
+
+      <nav class="nav-links">
+        <a href="/simulator">Traffic Simulator</a>
+        <a href="/services">Service Health</a>
+        <a href="/timeline">Event Timeline</a>
+        <a href="/logs">Logs & Export</a>
+        <a href="/alerts">Alerts <span id="alertDot" class="alert-dot hidden"></span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="sidebar-btn" onclick="resetSystem()">Reset System</button>
+        <a class="sidebar-btn secondary" href="/api/export_logs">Export Logs</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

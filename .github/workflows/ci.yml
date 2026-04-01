@@ -2,9 +2,8 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build-and-test:
@@ -17,13 +16,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
 
-      - name: Validate Python Code
+      - name: Run Basic Syntax Check
         run: |
           python -m py_compile app.py
 

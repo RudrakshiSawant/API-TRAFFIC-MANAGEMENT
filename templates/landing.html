@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Traffic Control Platform</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="landing-body">
+
+  <section class="hero-section">
+    <div class="hero-content">
+      <p class="hero-tag">Generalized Intelligent API Protection Platform</p>
+      <h1>API Traffic Control Platform</h1>
+      <p class="hero-desc">
+        A centralized traffic governance system designed to monitor, filter, and protect backend services
+        from overload, unhealthy request spikes, and unstable traffic patterns.
+      </p>
+
+      <a href="/simulator" class="hero-btn">Get Started</a>
+    </div>
+  </section>
+
+  <section class="info-section">
+    <div class="info-grid">
+      <div class="info-card">
+        <h2>System Objective</h2>
+        <p>
+          This platform simulates how a modern API gateway or traffic control layer protects distributed services
+          by allowing safe requests, blocking excessive load, and preventing unstable services from receiving harmful traffic.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h2>How It Works</h2>
+        <p>
+          Incoming requests first pass through a traffic filter and rule engine. Based on traffic type and request volume,
+          the platform decides whether traffic should be allowed, limited, or fully rejected.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h2>Traffic Rules</h2>
+        <ul>
+          <li><strong>Normal Traffic:</strong> Allows up to 5 requests</li>
+          <li><strong>Burst Traffic:</strong> Allows up to 10 requests</li>
+          <li><strong>Priority Traffic:</strong> Allows up to 15 requests</li>
+          <li><strong>Unhealthy Services:</strong> Reject all incoming traffic</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h2>Core Features</h2>
+        <ul>
+          <li>Traffic filtering and request control</li>
+          <li>Dynamic service health monitoring</li>
+          <li>Overload score tracking</li>
+          <li>Event timeline and traffic logs</li>
+          <li>CSV export for decision logs</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

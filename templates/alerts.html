@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-header">
+  <h1>System Alerts</h1>
+  <p>Monitor active warnings and critical service health conditions across the platform.</p>
+</section>
+
+<section class="content-card">
+  <h2>Active Alerts</h2>
+  <div id="alertsContainer" class="alerts-list">
+    <div class="empty-state">No active alerts. All services are operating normally.</div>
+  </div>
+</section>
+{% endblock %}

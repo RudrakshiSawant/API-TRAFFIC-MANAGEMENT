@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Traffic Control Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #f6f8fc;
+      color: #1f2937;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f172a, #1d4ed8);
+      color: white;
+      padding: 70px 8%;
+    }
+
+    .hero h1 {
+      font-size: 44px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 850px;
+      line-height: 1.7;
+      opacity: 0.95;
+    }
+
+    .hero-actions {
+      margin-top: 28px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: #ffffff;
+      color: #1d4ed8;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.35);
+      color: white;
+    }
+
+    .section {
+      padding: 50px 8%;
+    }
+
+    .section-title {
+      font-size: 30px;
+      margin-bottom: 10px;
+      color: #0f172a;
+    }
+
+    .section-subtitle {
+      color: #64748b;
+      margin-bottom: 30px;
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 900px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .overview-card {
+      background: white;
+      padding: 28px;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      border: 1px solid #e5e7eb;
+    }
+
+    .overview-card h3 {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .overview-card .value {
+      font-size: 36px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      border: 1px solid #e5e7eb;
+    }
+
+    .panel h3 {
+      font-size: 24px;
+      margin-bottom: 22px;
+      color: #0f172a;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border: 1px solid #d1d5db;
+      background: #f8fafc;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .inject-btn {
+      width: 100%;
+      background: #1d4ed8;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .flow-box {
+      margin-top: 28px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    .flow-box h4 {
+      margin-bottom: 20px;
+      font-size: 18px;
+      color: #0f172a;
+    }
+
+    .pipeline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pipe-node {
+      flex: 1;
+      min-width: 130px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      padding: 18px;
+      border-radius: 14px;
+      text-align: center;
+      position: relative;
+    }
+
+    .pipe-node span {
+      display: block;
+      color: #64748b;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .pipe-node strong {
+      font-size: 15px;
+      color: #0f172a;
+    }
+
+    .arrow {
+      font-size: 26px;
+      color: #2563eb;
+      animation: moveArrow 1s infinite;
+    }
+
+    @keyframes moveArrow {
+      0% { opacity: 0.35; transform: translateX(0); }
+      50% { opacity: 1; transform: translateX(5px); }
+      100% { opacity: 0.35; transform: translateX(0); }
+    }
+
+    .result-box {
+      margin-top: 24px;
+      background: #0f172a;
+      color: white;
+      border-radius: 18px;
+      padding: 22px;
+      line-height: 1.9;
+      min-height: 160px;
+      font-size: 15px;
+    }
+
+    .green { color: #22c55e; font-weight: 700; }
+    .red { color: #ef4444; font-weight: 700; }
+    .yellow { color: #f59e0b; font-weight: 700; }
+
+    .rules-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .rule-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .rule-item strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+
+    .rule-item p {
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      transition: 0.25s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .service-card.unhealthy {
+      border: 2px solid #ef4444;
+      box-shadow: 0 12px 28px rgba(239,68,68,0.15);
+    }
+
+    .service-card.degraded {
+      border: 2px solid #f59e0b;
+      box-shadow: 0 12px 28px rgba(245,158,11,0.12);
+    }
+
+    .service-card h4 {
+      font-size: 22px;
+      margin-bottom: 18px;
+      color: #0f172a;
+    }
+
+    .service-meta {
+      display: grid;
+      gap: 10px;
+      color: #334155;
+      font-size: 15px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 16px;
+    }
+
+    .timeline-item {
+      background: white;
+      border-radius: 16px;
+      padding: 18px 20px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .timeline-item .time {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .timeline-item .event {
+      font-size: 15px;
+      color: #0f172a;
+      line-height: 1.7;
+    }
+
+    .logs-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 15px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 1024px) {
+      .lab-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pipeline {
+        flex-direction: column;
+      }
+
+      .arrow {
+        transform: rotate(90deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <h1>API Traffic Management & Control Platform</h1>
+    <p>
+      This platform simulates how a generalized system manages incoming API traffic, applies request control rules,
+      protects backend services from overload, and identifies unhealthy APIs before they impact overall system stability.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="scrollToLab()">Start Simulation</button>
+      <button class="btn btn-outline" onclick="window.location='/api/export_logs'">Export Logs</button>
+      <button class="btn btn-outline" onclick="resetDashboard()">Reset System</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">System Overview</h2>
+    <p class="section-subtitle">
+      A quick view of how much traffic has been received, how much was allowed, how much was blocked,
+      and how many backend services are currently unhealthy.
+    </p>
+
+    <div class="overview-grid">
+      <div class="overview-card">
+        <h3>Total Requests Received</h3>
+        <div class="value" id="total_received">0</div>
+      </div>
+      <div class="overview-card">
+        <h3>Total Requests Allowed</h3>
+        <div class="value" id="total_allowed">0</div>
+      </div>
+      <div class="overview-card">
+        <h3>Total Requests Blocked</h3>
+        <div class="value" id="total_blocked">0</div>
+      </div>
+      <div class="overview-card">
+        <h3>Unhealthy Services</h3>
+        <div class="value" id="unhealthy_services">0</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="lab">
+    <h2 class="section-title">Traffic Control Lab</h2>
+    <p class="section-subtitle">
+      Inject traffic into different services and observe how the traffic control engine processes,
+      filters, blocks, and protects backend APIs.
+    </p>
+
+    <div class="lab-grid">
+      <div class="panel">
+        <h3>Inject Traffic</h3>
+
+        <div class="form-grid">
+          <div>
+            <label>Select Service</label>
+            <select id="service">
+              <option>Auth Service</option>
+              <option>Data Service</option>
+              <option>Analytics Service</option>
+              <option>Notification Service</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Traffic Type</label>
+            <select id="traffic_type">
+              <option>Normal</option>
+              <option>Burst</option>
+              <option>Priority</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Request Count</label>
+            <input type="number" id="request_count" min="1" value="5">
+          </div>
+        </div>
+
+        <button class="btn inject-btn" onclick="simulateTraffic()">Inject Traffic</button>
+
+        <div class="flow-box">
+          <h4>Request Processing Pipeline</h4>
+          <div class="pipeline">
+            <div class="pipe-node">
+              <span>Source</span>
+              <strong>Client</strong>
+            </div>
+            <div class="arrow">→</div>
+            <div class="pipe-node">
+              <span>Control Layer</span>
+              <strong>Traffic Filter</strong>
+            </div>
+            <div class="arrow">→</div>
+            <div class="pipe-node">
+              <span>Rule Engine</span>
+              <strong>Decision Logic</strong>
+            </div>
+            <div class="arrow">→</div>
+            <div class="pipe-node">
+              <span>Target</span>
+              <strong id="flowService">Service</strong>
+            </div>
+            <div class="arrow">→</div>
+            <div class="pipe-node">
+              <span>Output</span>
+              <strong id="flowDecision">Awaiting</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-box" id="resultBox">
+          Inject traffic to observe how the system processes and controls API requests.
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Traffic Control Rules</h3>
+        <div class="rules-list" id="rulesBox"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Backend Service Health</h2>
+    <p class="section-subtitle">
+      Each backend service is monitored independently. When blocked traffic repeatedly increases,
+      the service overload score rises and its health can degrade from Healthy to Degraded or Unhealthy.
+    </p>
+    <div class="services-grid" id="serviceCards"></div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Traffic Event Timeline</h2>
+    <p class="section-subtitle">
+      A readable event stream showing how the platform handled each traffic injection in sequence.
+    </p>
+    <div class="timeline" id="timelineBox"></div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Traffic Logs</h2>
+    <p class="section-subtitle">
+      Structured logs generated from traffic decisions. These can be exported for reporting and analysis.
+    </p>
+
+    <div class="logs-actions">
+      <button class="btn btn-primary" onclick="window.location='/api/export_logs'">Download CSV Logs</button>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Service</th>
+            <th>Traffic Type</th>
+            <th>Requests</th>
+            <th>Allowed</th>
+            <th>Blocked</th>
+            <th>Health</th>
+            <th>Decision</th>
+          </tr>
+        </thead>
+        <tbody id="logsTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <script>
+    function scrollToLab() {
+      document.getElementById("lab").scrollIntoView({ behavior: "smooth" });
+    }
+
+    async function fetchStats() {
+      const res = await fetch('/api/stats');
+      const data = await res.json();
+
+      document.getElementById('total_received').innerText = data.total_received;
+      document.getElementById('total_allowed').innerText = data.total_allowed;
+      document.getElementById('total_blocked').innerText = data.total_blocked;
+      document.getElementById('unhealthy_services').innerText = data.unhealthy_services;
+
+      const serviceCards = document.getElementById('serviceCards');
+      serviceCards.innerHTML = '';
+
+      for (const [service, stats] of Object.entries(data.service_usage)) {
+        let healthClass = '';
+        let healthColor = 'green';
+
+        if (stats.health === 'Degraded') {
+          healthClass = 'degraded';
+          healthColor = 'yellow';
+        } else if (stats.health === 'Unhealthy') {
+          healthClass = 'unhealthy';
+          healthColor = 'red';
+        }
+
+        serviceCards.innerHTML += `
+          <div class="service-card ${healthClass}">
+            <h4>${service}</h4>
+            <div class="service-meta">
+              <div><strong>Status:</strong> <span class="${healthColor}">${stats.health}</span></div>
+              <div><strong>Total Received:</strong> ${stats.received}</div>
+              <div><strong>Allowed:</strong> ${stats.allowed}</div>
+              <div><strong>Blocked:</strong> ${stats.blocked}</div>
+              <div><strong>Overload Score:</strong> ${stats.overload_score}</div>
+              <div><strong>Last Activity:</strong> ${stats.last_activity}</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    async function fetchLogs() {
+      const res = await fetch('/api/logs');
+      const logs = await res.json();
+
+      const logsTable = document.getElementById('logsTable');
+      logsTable.innerHTML = '';
+
+      const timelineBox = document.getElementById('timelineBox');
+      timelineBox.innerHTML = '';
+
+      logs.forEach(log => {
+        let healthColor = 'green';
+        if (log.health === 'Degraded') healthColor = 'yellow';
+        if (log.health === 'Unhealthy') healthColor = 'red';
+
+        logsTable.innerHTML += `
+          <tr>
+            <td>${log.time}</td>
+            <td>${log.service}</td>
+            <td>${log.traffic_type}</td>
+            <td>${log.requests}</td>
+            <td class="green">${log.allowed}</td>
+            <td class="red">${log.blocked}</td>
+            <td class="${healthColor}">${log.health}</td>
+            <td>${log.decision}</td>
+          </tr>
+        `;
+
+        timelineBox.innerHTML += `
+          <div class="timeline-item">
+            <div class="time">${log.time}</div>
+            <div class="event">
+              <strong>${log.service}</strong> received <strong>${log.requests}</strong> ${log.traffic_type.toLowerCase()} request(s). 
+              <span class="green">${log.allowed} allowed</span>, 
+              <span class="red">${log.blocked} blocked</span>. 
+              Current status: <span class="${healthColor}">${log.health}</span>.
+            </div>
+          </div>
+        `;
+      });
+
+      if (logs.length === 0) {
+        timelineBox.innerHTML = `
+          <div class="timeline-item">
+            <div class="time">No Events Yet</div>
+            <div class="event">Traffic events will appear here once you start simulation.</div>
+          </div>
+        `;
+      }
+    }
+
+    async function fetchRules() {
+      const res = await fetch('/api/rules');
+      const rules = await res.json();
+
+      document.getElementById('rulesBox').innerHTML = `
+        <div class="rule-item">
+          <strong>Normal Traffic Rule</strong>
+          <p>Allows up to ${rules.Normal} requests in a standard traffic cycle before excess requests are blocked.</p>
+        </div>
+        <div class="rule-item">
+          <strong>Burst Traffic Rule</strong>
+          <p>Allows up to ${rules.Burst} requests for sudden high-load scenarios. Additional traffic is filtered.</p>
+        </div>
+        <div class="rule-item">
+          <strong>Priority Traffic Rule</strong>
+          <p>Allows up to ${rules.Priority} requests for critical operations with a higher forwarding limit.</p>
+        </div>
+        <div class="rule-item">
+          <strong>Service Health Protection</strong>
+          <p>Repeated blocked traffic increases overload score. Overloaded services degrade and can eventually reject all traffic.</p>
+        </div>
+      `;
+    }
+
+    async function simulateTraffic() {
+      const service = document.getElementById('service').value;
+      const traffic_type = document.getElementById('traffic_type').value;
+      const request_count = parseInt(document.getElementById('request_count').value);
+
+      document.getElementById('flowService').innerText = service;
+      document.getElementById('flowDecision').innerText = 'Processing...';
+
+      const res = await fetch('/simulate_traffic', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ service, traffic_type, request_count })
+      });
+
+      const data = await res.json();
+
+      let healthColor = 'green';
+      if (data.health === 'Degraded') healthColor = 'yellow';
+      if (data.health === 'Unhealthy') healthColor = 'red';
+
+      const decisionText = data.blocked_requests > 0 ? 'Controlled' : 'Forwarded';
+      document.getElementById('flowDecision').innerText = decisionText;
+
+      document.getElementById('resultBox').innerHTML = `
+        <strong>Service:</strong> ${data.service}<br>
+        <strong>Endpoint:</strong> ${data.service_endpoint}<br>
+        <strong>Traffic Type:</strong> ${data.traffic_type}<br>
+        <strong>Requests Sent:</strong> ${data.requests_sent}<br>
+        <strong>Allowed Requests:</strong> <span class="green">${data.allowed_requests}</span><br>
+        <strong>Blocked Requests:</strong> <span class="red">${data.blocked_requests}</span><br>
+        <strong>Service Health:</strong> <span class="${healthColor}">${data.health}</span><br>
+        <strong>Decision:</strong> ${data.decision}<br>
+        <strong>Timestamp:</strong> ${data.timestamp}
+      `;
+
+      fetchStats();
+      fetchLogs();
+    }
+
+    async function resetDashboard() {
+      await fetch('/api/reset', { method: 'POST' });
+
+      document.getElementById('resultBox').innerHTML = `
+        The system has been reset. All service activity, traffic counters, overload states, and logs have been cleared.
+      `;
+      document.getElementById('flowService').innerText = 'Service';
+      document.getElementById('flowDecision').innerText = 'Awaiting';
+
+      fetchStats();
+      fetchLogs();
+    }
+
+    fetchStats();
+    fetchLogs();
+    fetchRules();
+  </script>
+</body>
+</html>
